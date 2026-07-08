@@ -12,7 +12,7 @@ export class GatewayController {
   ) {}
 
   @Get('health')
-  @Public()
+  @Public() // becomes publicly accessible and bypasses the JwtAuthGuard
   async health() {
     const ping = async (service: string, client: ClientProxy) => {
       try {

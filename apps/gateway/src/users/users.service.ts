@@ -28,7 +28,11 @@ export class UsersService {
           role: 'user',
         },
       },
-      { upsert: true, new: true, setDefaultsOnInsert: true },
+      { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true },
     );
+  }
+
+  async findByClerkUserId(clerkUserId: string) {
+    return await this.userModel.findOne({ clerkUserId });
   }
 }

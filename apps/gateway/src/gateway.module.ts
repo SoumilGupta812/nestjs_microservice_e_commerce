@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI as string),
+    MongooseModule.forRoot(process.env.MONGO_URI as string), //connect to MongoDB using the connection string from environment variables
     UsersModule,
     AuthModule,
     ClientsModule.register([

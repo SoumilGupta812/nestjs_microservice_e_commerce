@@ -59,7 +59,7 @@ export class JwtAuthGuard implements CanActivate {
       REQUIRE_ADMIN_KEY,
       [context.getHandler(), context.getClass()],
     );
-    if (requiredRole && user.role !== requiredRole) {
+    if (requiredRole === 'admin' && user.role !== requiredRole) {
       throw new UnauthorizedException('Access denied');
     }
     return true;

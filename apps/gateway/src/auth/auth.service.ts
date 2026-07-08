@@ -4,6 +4,7 @@ import { UserContext } from './auth.types';
 
 @Injectable()
 export class AuthService {
+  //create a Clerk client instance using the provided secret and publishable keys from environment variables
   private readonly clerk = createClerkClient({
     secretKey: process.env.CLERK_SECRET_KEY,
     publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
@@ -18,6 +19,7 @@ export class AuthService {
   async verifyAndBuildContext(token: string): Promise<UserContext> {
     try {
       const verified = await verifyToken(token, this.jwtVerifyOptions());
+
       const payload = verified?.payload ?? (verified as any);
       const clerkUserId = payload?.sub ?? payload?.user_id ?? payload?.userId;
 

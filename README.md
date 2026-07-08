@@ -96,3 +96,44 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+nest new <project-name>
+nest g app <service-name> --> creates a new microservice
+
+in nest-cli.json sourceRoot: "." root "." remove tsconfig path
+
+$ npm i --save amqplib amqp-connection-manager
+start rabbitMQ : docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+--> -d run in background --> -p port mapping
+
+now in microservice
+setup mircoservices in main.ts
+now in controller add @MessagePattern decorator
+
+now in gateway entry point
+in its module of imports add ClientsModule.register([{ name: 'AUTH_SERVICE', transport: Transport.RMQ, options: { urls: ['amqp://localhost:5672'], queue: 'auth_queue' } }])
+
+now in controller or service inject ClientProxy using --> constructor(@Inject('AUTH_SERVICE') private readonly authClient: ClientProxy)
+
+to send message use client.send('auth.login', { from: 'gateway' })
+
+now to authentication:
+
+create auth folder in gateway
+in auth.types.ts --> create UserContext interface >> UserContext: { name: string, email: string, role: 'admin' | 'user', clerkUserId: string }
+
+now create public and admin/requireAdmin decorators in auth folder --> public.decorator.ts admin.decorator.ts
+where we set metadata in decorators --> SetMetadata(IS_PUBLIC_KEY, true) SetMetadata(REQUIRE_ADMIN_KEY, true)
+
+now create currentUser decorator in auth folder --> current-user.decorator.ts
+it will take user context attached to request and return it
+we use createParamDecorator to create a custom decorator
+
+install clerk --> npm i @clerk/backend @nestjs/config mongoose @nestjs/mongoose
+
+create schema for user in users folder
+register schema in module
+inject schema in service constructor(
+@InjectModel(User.name)
+private readonly userModel: Model<UserDocument>,
+) {}

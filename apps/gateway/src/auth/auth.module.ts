@@ -11,7 +11,7 @@ import { AuthController } from './auth.controller';
     AuthService,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: JwtAuthGuard, //registering the JwtAuthGuard as a global guard for the application
     },
   ],
   controllers: [AuthController],

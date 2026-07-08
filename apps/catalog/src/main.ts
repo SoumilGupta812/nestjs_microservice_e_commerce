@@ -18,7 +18,7 @@ async function bootstrap() {
         urls: [rmqUrl],
         queue,
         queueOptions: {
-          durable: false,
+          durable: false, // in production, set this to true , to make sure the queue is not deleted
         },
       },
     },
