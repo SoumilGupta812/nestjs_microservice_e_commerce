@@ -74,7 +74,6 @@ export class ProductsHttpController {
 
         imageUrl = uploadResult.url;
         mediaId = uploadResult.mediaId;
-        console.log('Uploaded product ', uploadResult);
       } catch (error) {
         mapRpcErrorToHttp(error);
       }
@@ -97,10 +96,8 @@ export class ProductsHttpController {
     } catch (error) {
       mapRpcErrorToHttp(error);
     }
-    console.log('Created product ', product);
     if (mediaId) {
       try {
-        console.log('Attaching media to product');
         const result = await firstValueFrom(
           this.mediaClient.send('media.attachToProduct', {
             mediaId,
@@ -108,7 +105,6 @@ export class ProductsHttpController {
             attachByUserId: user.clerkUserId,
           }),
         );
-        console.log('Attached media to product', result);
       } catch (error) {
         mapRpcErrorToHttp(error);
       }

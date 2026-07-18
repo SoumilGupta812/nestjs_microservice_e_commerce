@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SearchModule } from './search.module';
 import { Logger } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { applyToMicroservice } from '@app/rpc/rpc.setup';
 
 async function bootstrap() {
   process.title = 'search';
@@ -21,6 +22,8 @@ async function bootstrap() {
       },
     },
   );
+
+  applyToMicroservice(app);
   app.enableShutdownHooks();
   await app.listen();
   logger.log(`Search RMQ listening on queue ${queue} via ${rmqUrl}`);

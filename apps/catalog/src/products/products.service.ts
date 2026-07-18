@@ -4,12 +4,15 @@ import { isValidObjectId, Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { rpcBadRequest, rpcNotFound } from '@app/rpc/rpc.helpers';
 import type { ProductStatus } from './product.schema';
+import { ProductEventsPublisher } from '../events/product-events.publisher';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product.name)
     private readonly productModel: Model<ProductDocument>,
+
+    private readonly events: ProductEventsPublisher,
   ) {}
 
   async createNewProduct(input: {
@@ -42,6 +45,16 @@ export class ProductsService {
       status: input.status ?? 'DRAFT',
       imageUrl: input.imageUrl ?? '',
       createdByClerkUserId: input.createdByClerkUserId,
+    });
+
+    await this.events.productCreated({
+      productId: newlyCreatedProduct._id.toString(),
+      name: newlyCreatedProduct.name,
+      description: newlyCreatedProduct.description,
+      status: newlyCreatedProduct.status,
+      price: newlyCreatedProduct.price,
+      imageUrl: newlyCreatedProduct.imageUrl,
+      createdByClerkUserId: newlyCreatedProduct.createdByClerkUserId,
     });
 
     return newlyCreatedProduct;

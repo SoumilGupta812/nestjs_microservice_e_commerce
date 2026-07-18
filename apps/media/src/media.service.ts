@@ -83,10 +83,9 @@ export class MediaService {
       .findByIdAndUpdate(
         input.mediaId,
         { $set: { productId: input.productId } },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .exec();
-    console.log('media service err');
     if (!media) {
       rpcBadRequest('Media not found');
     }
